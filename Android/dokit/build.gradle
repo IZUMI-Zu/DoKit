@@ -106,6 +106,7 @@ dependencies {
     //okhttp wrap
     implementation project(':dokit-okhttp-api')
     implementation project(':dokit-util')
+    implementation project(path: ':OpenCV')
 
 
 //    implementation rootProject.ext.dependencies["mimecraft"]

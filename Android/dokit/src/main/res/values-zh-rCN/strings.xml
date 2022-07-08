@@ -38,6 +38,9 @@
     <string name="dk_kit_db_debug">DBView</string>
     <string name="dk_kit_weak_network">模拟弱网</string>
     <string name="dk_kit_view_check">控件检查</string>
+    <string name="dk_kit_design_check">设计稿检查</string>
+    <string name="dk_kit_design_check_choose">选择设计稿</string>
+    <string name="dk_kit_design_check_compare">比对该界面</string>
     <string name="dk_kit_net_monitor">网络</string>
     <string name="dk_kit_ui_monitor">UI显示实时数据</string>
     <string name="dk_kit_time_counter">启动耗时</string>
