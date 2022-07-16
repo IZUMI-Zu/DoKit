@@ -1,50 +1,35 @@
 package com.didichuxing.doraemonkit.kit.designcheck;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.didichuxing.doraemonkit.DoKit;
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.config.DesignCheckConfig;
 import com.didichuxing.doraemonkit.kit.core.AbsDoKitView;
 import com.didichuxing.doraemonkit.kit.core.DoKitViewLayoutParams;
-import com.didichuxing.doraemonkit.util.ActivityUtils;
-import com.didichuxing.doraemonkit.util.FileIOUtils;
-import com.didichuxing.doraemonkit.util.ImageUtils;
-import com.didichuxing.doraemonkit.util.LifecycleListenerUtil;
 import com.didichuxing.doraemonkit.util.UIUtils;
 
-import java.io.File;
+import org.opencv.android.OpenCVLoader;
 
 public class DesignCheckInfoDoKitView extends AbsDoKitView {
-    private TextView mCheckHex;
+    private TextView mStatus;
     private ImageView mClose;
     private Button mDoDesignCheck;
-    private View mFloatView;
 
     private int mWindowWidth;
     private int mWindowHeight;
-    private int left, right, top, bottom;
-    private boolean mCapture = false;
-
-    private Runnable mRunnable;
 
     @Override
     public void onCreate(Context context) {
+        OpenCVLoader.initDebug(); // TODO REMOVE
         mWindowWidth = UIUtils.getWidthPixels();
         mWindowHeight = UIUtils.getHeightPixels();
     }
@@ -67,13 +52,17 @@ public class DesignCheckInfoDoKitView extends AbsDoKitView {
         initView();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ViewUtils.clearChild(getViewGroup());
+    }
 
     private void initView() {
-        mCheckHex = findViewById(R.id.align_hex);
+        mStatus = findViewById(R.id.tv_status_bar_switch);
         mClose = findViewById(R.id.close);
         mDoDesignCheck = findViewById(R.id.btn_bottom);
         mDoDesignCheck.setText(R.string.dk_kit_design_check_compare);
-        mFloatView = this.getActivity().getCurrentFocus();
 
         mClose.setOnClickListener(v -> {
             DesignCheckConfig.setDesignCheckOpen(false);
@@ -82,20 +71,31 @@ public class DesignCheckInfoDoKitView extends AbsDoKitView {
 
         mDoDesignCheck.setOnClickListener(v -> {
             // TODO Better Way
-            if (!mCapture) {
-                Bitmap bitmapColored = ScreenCapture.getBitmapFromView(
-                    this.getActivity().getWindow().getDecorView(), Color.WHITE);
-                File file = this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                mCapture = FileIOUtils.writeFileFromBytesByStream(file.getPath() + "/target.png",
-                    ImageUtils.bitmap2Bytes(bitmapColored, Bitmap.CompressFormat.PNG, 100));
-                if (mCapture) mDoDesignCheck.setText(R.string.dk_kit_design_check_choose);
-            } else {
-                // TODO 在本地与网络进行选择
-                mDoDesignCheck.setText(R.string.dk_kit_design_check);
-                DoKit.launchFullScreen(ChooseFile.class);
-                DesignCheckConfig.setDesignCheckOpen(false);
-                DoKit.removeFloating(DesignCheckInfoDoKitView.class);
+            if (ImageCompareUtils.isCompare) {
+                ViewUtils.clearChild(getViewGroup());
+                ImageCompareUtils.isCompare = false;
             }
+            ImageCompareUtils.tarScreen = ScreenCaptureUtils.getScreenCapture(this.getActivity(), isNormalMode());
+            DesignCheckConfig.setDesignCheckOpen(false);
+            DoKit.removeFloating(DesignCheckInfoDoKitView.class);
+            DoKit.launchFullScreen(UICheckView.class);
         });
+
+        // TODO change logic
+        if (ImageCompareUtils.isCompare) {
+            mStatus.setText("相似度:\n" + ImageCompareUtils.similarity);
+            ViewUtils.drawView(getViewGroup());
+        }
     }
+
+    private ViewGroup getViewGroup() {
+        if (isNormalMode()) {
+            return (ViewGroup) ((ViewGroup) this.getActivity().getWindow().getDecorView()).getChildAt(0);
+        } else {
+            return (ViewGroup) (this.getActivity().getWindow().getDecorView());
+        }
+    }
+
+
 }
+

@@ -39,7 +39,6 @@
     <string name="dk_kit_weak_network">模擬弱網</string>
     <string name="dk_kit_view_check">View 元件檢查</string>
     <string name="dk_kit_design_check">設計稿檢查</string>
-    <string name="dk_kit_design_check_choose">選擇設計稿</string>
     <string name="dk_kit_design_check_compare">比對該界面</string>
     <string name="dk_kit_net_monitor">網絡</string>
     <string name="dk_kit_ui_monitor">UI顯示實時數據</string>

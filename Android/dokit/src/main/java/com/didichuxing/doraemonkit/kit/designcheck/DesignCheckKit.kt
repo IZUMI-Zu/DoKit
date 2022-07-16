@@ -20,7 +20,6 @@ class DesignCheckKit : AbstractKit() {
 
     override fun onClickWithReturn(activity: Activity): Boolean {
         DoKit.launchFloating<DesignCheckInfoDoKitView>()
-//        startUniversalActivity(HealthFragment::class.java, activity, null, true)
         DesignCheckConfig.setDesignCheckOpen(true)
         return true
     }
