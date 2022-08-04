@@ -3,6 +3,7 @@ package com.didichuxing.doraemonkit.kit.designcheck;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,10 @@ import com.didichuxing.doraemonkit.util.ThreadUtils;
 import com.didichuxing.doraemonkit.util.ToastUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class UICheckView extends AbsDoKitFragment {
     private TextView mText;
@@ -52,7 +57,6 @@ public class UICheckView extends AbsDoKitFragment {
         return R.layout.dk_fragment_desgin_check;
     }
 
-    @NonNull
     @Override
     public String initTitle() {
         return "图像选择与处理";
@@ -75,25 +79,25 @@ public class UICheckView extends AbsDoKitFragment {
                 }
             } else {
                 // TODO
-                ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
-                    @Override
-                    public Object doInBackground() {
-                        ImageCompareUtils.isLocal = true;
-                        ImageCompareUtils.resFilePath = FilePath;
-                        ImageCompareUtils.compareDraft();
-                        return null;
-                    }
-                    @Override
-                    public void onSuccess(Object result) {
-                        finish();
-                    }
-                });
-
+                ImageCompareUtils.isLocal = true;
+                ThreadUtils.executeByIo(compareThread);
             }
         });
         // TODO
         mInternet.setOnClickListener(v -> {
             if (!isChoose) {
+//                ThreadUtils.executeByIo(new ThreadUtils.SimpleTask<Object>() {
+//                    @Override
+//                    public Object doInBackground() {
+//                        String url = "";
+//                        ImageCompareUtils.srcScreen = getPic(url);
+//                        return ImageCompareUtils.srcScreen != null;
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Object result) {
+//                    }
+//                });
                 ToastUtils.showShort("目前尚未实现");
                 isChoose = true;
             } else {
@@ -130,4 +134,32 @@ public class UICheckView extends AbsDoKitFragment {
         DesignCheckConfig.setDesignCheckOpen(true);
         DoKit.launchFloating(DesignCheckInfoDoKitView.class);
     }
+
+    public Bitmap getPic(String url) {
+        try {
+            return BitmapFactory.decodeStream(new OkHttpClient().newCall(
+                new Request.Builder().url(url).build()).execute().body().byteStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    ThreadUtils.SimpleTask<Object> compareThread = new ThreadUtils.SimpleTask<Object>() {
+        @Override
+        public Object doInBackground() {
+            if (ImageCompareUtils.isLocal) {
+                ImageCompareUtils.resFilePath = FilePath;
+                ImageCompareUtils.compareDraft();
+            } else {
+                // TODO
+            }
+            return null;
+        }
+
+        @Override
+        public void onSuccess(Object result) {
+            finish();
+        }
+    };
 }

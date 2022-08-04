@@ -19,6 +19,7 @@ class DesignCheckKit : AbstractKit() {
         get() = true
 
     override fun onClickWithReturn(activity: Activity): Boolean {
+        System.loadLibrary("opencv_java4")
         DoKit.launchFloating<DesignCheckInfoDoKitView>()
         DesignCheckConfig.setDesignCheckOpen(true)
         return true

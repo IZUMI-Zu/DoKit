@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import com.didichuxing.doraemonkit.util.UIUtils;
 
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +20,8 @@ public class ViewUtils {
     // TODO 处理最外层
     public static void drawView(ViewGroup viewGroup) {
         for (MatOfPoint matOfPoint : ImageCompareUtils.getDiffDot()) {
-            Point point = ImageCompareUtils.getCenterPoint(Imgproc.boundingRect(matOfPoint));
-            View view = traverseViews(viewGroup, (int) point.x, (int) point.y + UIUtils.getStatusBarHeight());
+            int[] point = ImageCompareUtils.getCenterPoint(matOfPoint);
+            View view = traverseViews(viewGroup, point[0], point[1] + UIUtils.getStatusBarHeight());
             replaceDrawable(view);
         }
     }
