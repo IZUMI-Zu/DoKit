@@ -80,7 +80,7 @@ public class DesignCheckInfoDoKitView extends AbsDoKitView {
                 ViewUtils.clearChild(getViewGroup());
                 mStatus.clearComposingText();
             }
-
+            // for test
             byte[] screenByte = ImageUtils.bitmap2Bytes(ScreenCaptureUtils.getScreenCapture(this.getActivity(), isNormalMode()), Bitmap.CompressFormat.PNG, 100);
             FileIOUtils.writeFileFromBytesByStream(this.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath() + "/a.png", screenByte);
 

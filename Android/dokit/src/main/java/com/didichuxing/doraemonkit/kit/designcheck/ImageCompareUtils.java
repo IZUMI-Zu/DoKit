@@ -19,7 +19,6 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Range;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.features2d.DescriptorMatcher;
@@ -42,13 +41,10 @@ public final class ImageCompareUtils {
     public static Bitmap tarScreen;
     public static Bitmap srcScreen;
 
-    private static Mat tarScreenMat = new Mat();
-    private static Mat srcScreenMat = new Mat();
-
     // TODO 直接截图获取不同，生成报告
-    // TODO 不同格式
     public static void compareDraft() {
         if (!diffDot.isEmpty()) diffDot.clear();
+        Mat tarScreenMat = new Mat(), srcScreenMat = new Mat();
         Utils.bitmapToMat(tarScreen, tarScreenMat);
         Utils.bitmapToMat(srcScreen, srcScreenMat);
         if (matSizeCompress(tarScreenMat, srcScreenMat)) {
@@ -60,7 +56,7 @@ public final class ImageCompareUtils {
             for (MatOfPoint matOfPoint : diffDot) {
                 Imgproc.approxPolyDP(new MatOfPoint2f(matOfPoint.toArray()),
                     new MatOfPoint2f(matOfPoint.toArray()), 3, true);
-                Imgproc.rectangle(tarScreenMat,  Imgproc.boundingRect(matOfPoint), new Scalar(255, 0, 0, 128), 2);
+                Imgproc.rectangle(tarScreenMat, Imgproc.boundingRect(matOfPoint), new Scalar(255, 0, 0, 128), 2);
             }
             isCompare = true;
         } else
@@ -73,14 +69,6 @@ public final class ImageCompareUtils {
 
     public static ArrayList<MatOfPoint> getDiffDot() {
         return diffDot;
-    }
-
-    public static int[] getCenterPoint(MatOfPoint matOfPoint) {
-        Rect rect = Imgproc.boundingRect(matOfPoint);
-        int[] point = new int[2];
-        point[0] = (int) (rect.x + Math.round(rect.width / 2.0));
-        point[1] = (int) (rect.y + Math.round(rect.height / 2.0));
-        return point;
     }
 
     private static boolean matSizeCompress(Mat srcMat, Mat tarMat) {
