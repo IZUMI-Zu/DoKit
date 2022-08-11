@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.didichuxing.doraemonkit.util.ToastUtils;
 import com.didichuxing.doraemonkit.util.UIUtils;
 
-public class ScreenCaptureUtils {
+public final class ScreenCaptureUtils {
 
     public static Bitmap getScreenCapture(Activity activity, boolean isNormalMode) {
         View screenView;

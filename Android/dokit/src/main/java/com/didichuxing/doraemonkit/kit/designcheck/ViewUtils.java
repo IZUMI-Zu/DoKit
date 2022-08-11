@@ -8,6 +8,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.didichuxing.doraemonkit.util.LogHelper;
 import com.didichuxing.doraemonkit.util.UIUtils;
 
 import org.opencv.core.MatOfPoint;
@@ -17,29 +18,27 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewUtils {
+public final class ViewUtils {
 
     public static void drawView(ViewGroup viewGroup) {
         for (MatOfPoint matOfPoint : ImageCompareUtils.getDiffDot()) {
             View view = traverseViews(viewGroup, getRectPoint(matOfPoint));
-            replaceDrawable(view);
+            if (view != null)
+                replaceDrawable(view);
         }
     }
 
     private static void replaceDrawable(View view) {
-        if (view instanceof TextureView) {
-            return;
-        }
+        if (view instanceof TextureView) return;
         LayerDrawable newDrawable;
         StrokeLineDrawable border = new StrokeLineDrawable();
         border.setStroke(3, Color.rgb(255, 0, 0));
         if (view.getBackground() != null) {
+            LogHelper.d("View", view.getClass().getName());
             Drawable oldDrawable = view.getBackground();
             if (oldDrawable instanceof LayerDrawable) {
                 for (int i = 0; i < ((LayerDrawable) oldDrawable).getNumberOfLayers(); i++) {
-                    if (((LayerDrawable) oldDrawable).getDrawable(i) instanceof StrokeLineDrawable) {
-                        return;
-                    }
+                    if (((LayerDrawable) oldDrawable).getDrawable(i) instanceof StrokeLineDrawable) return;
                 }
             }
             newDrawable = new LayerDrawable(new Drawable[]{
@@ -67,25 +66,19 @@ public class ViewUtils {
                     clearChild(((ViewGroup) view).getChildAt(index));
                 }
             }
-        } else {
-            clearDrawable(view);
-        }
+        } else clearDrawable(view);
     }
 
     private static void clearDrawable(View view) {
-        if (view.getBackground() == null) {
+        if (view.getBackground() == null)
             return;
-        }
         Drawable oldDrawable = view.getBackground();
-        if (!(oldDrawable instanceof LayerDrawable)) {
+        if (!(oldDrawable instanceof LayerDrawable))
             return;
-        }
         LayerDrawable layerDrawable = (LayerDrawable) oldDrawable;
         List<Drawable> drawables = new ArrayList<>();
         for (int i = 0; i < layerDrawable.getNumberOfLayers(); i++) {
-            if (layerDrawable.getDrawable(i) instanceof StrokeLineDrawable) {
-                continue;
-            }
+            if (layerDrawable.getDrawable(i) instanceof StrokeLineDrawable) continue;
             drawables.add(layerDrawable.getDrawable(i));
         }
         LayerDrawable newDrawable = new LayerDrawable(drawables.toArray(new Drawable[drawables.size()]));
@@ -104,9 +97,7 @@ public class ViewUtils {
             if (childCount != 0) {
                 for (int index = childCount - 1; index >= 0; index--) {
                     View v = traverseViews(((ViewGroup) view).getChildAt(index), points);
-                    if (v != null) {
-                        return v;
-                    }
+                    if (v != null) return v;
                 }
             }
         }
@@ -115,25 +106,24 @@ public class ViewUtils {
             (left < points[2][0] && points[2][0] < right && top < points[2][1] && points[2][1] < bottom) &&
             (left < points[3][0] && points[3][0] < right && top < points[3][1] && points[3][1] < bottom)) {
             return view;
-        } else {
-            return null;
-        }
+        } else return null;
     }
 
     private static int[][] getRectPoint(MatOfPoint matOfPoint) {
         Rect rect = Imgproc.boundingRect(matOfPoint);
         int[][] point = new int[4][2];
-        point[0][0] = rect.x - 10;
-        point[0][1] = rect.y + UIUtils.getStatusBarHeight() - 10;
+        point[0][0] = rect.x + 10;
+        point[0][1] = rect.y + UIUtils.getStatusBarHeight() + 10;
         point[1][0] = rect.x + rect.width - 10;
-        point[1][1] = rect.y + UIUtils.getStatusBarHeight() - 10;
-        point[2][0] = rect.x - 10;
+        point[1][1] = rect.y + UIUtils.getStatusBarHeight() + 10;
+        point[2][0] = rect.x + 10;
         point[2][1] = rect.y + UIUtils.getStatusBarHeight() + rect.height - 10;
         point[3][0] = rect.x + rect.width - 10;
         point[3][1] = rect.y + UIUtils.getStatusBarHeight() + rect.height - 10;
         return point;
     }
 
-    static class StrokeLineDrawable extends GradientDrawable {
-    }
+}
+
+class StrokeLineDrawable extends GradientDrawable {
 }
