@@ -26,7 +26,6 @@ import com.didichuxing.doraemonkit.config.DesignCheckConfig;
 import com.didichuxing.doraemonkit.kit.core.AbsDoKitFragment;
 import com.didichuxing.doraemonkit.util.ThreadUtils;
 import com.didichuxing.doraemonkit.util.ToastUtils;
-import com.didichuxing.doraemonkit.widget.dialog.DialogInfo;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -96,7 +95,7 @@ public class UICheckView extends AbsDoKitFragment {
             if (!isChoose) {
                 new AlertDialog.Builder(context)
                     .setTitle("设计稿获取").setMessage("请输入URL").setView(mEditText)
-                    .setPositiveButton("确定", (dialogInterface, i) -> ThreadUtils.executeByIo(downloadBitmap))
+                    .setPositiveButton("确定", (dialogInterface, i) -> ThreadUtils.executeByIo(new DownloadBitmapTask()))
                     .setNegativeButton("取消", null).create().show();
             } else {
                 new AlertDialog.Builder(context)
@@ -162,7 +161,7 @@ public class UICheckView extends AbsDoKitFragment {
         @Override
         public Boolean doInBackground() {
             Bitmap bitmap = ImageCompareUtils.compareDraft();
-            if (bitmap != null) return ImageCompareUtils.saveResult(bitmap, filePath, "res.png", isLocal);
+            if (bitmap != null) return ImageCompareUtils.saveReport(bitmap, filePath, "res.png", isLocal);
             else return false;
         }
 
@@ -178,7 +177,7 @@ public class UICheckView extends AbsDoKitFragment {
         }
     }
 
-    ThreadUtils.SimpleTask<Object> downloadBitmap = new ThreadUtils.SimpleTask<Object>() {
+    class DownloadBitmapTask extends ThreadUtils.SimpleTask<Object> {
         @Override
         public Boolean doInBackground() {
             ImageCompareUtils.srcScreen = getPic(mEditText.getText().toString());
@@ -200,5 +199,5 @@ public class UICheckView extends AbsDoKitFragment {
             super.onFail(t);
             ToastUtils.showShort("下载失败请重试");
         }
-    };
+    }
 }

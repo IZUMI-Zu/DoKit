@@ -99,6 +99,5 @@ public class DesignCheckInfoDoKitView extends AbsDoKitView {
             return viewGroup;
         }
     }
-
 }
 

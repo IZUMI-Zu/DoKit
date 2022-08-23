@@ -1,14 +1,20 @@
 package com.didichuxing.doraemonkit.kit.designcheck;
 
+import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.didichuxing.doraemonkit.util.LogHelper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.didichuxing.doraemonkit.util.UIUtils;
 
 import org.opencv.core.MatOfPoint;
@@ -31,10 +37,7 @@ public final class ViewUtils {
     private static void replaceDrawable(View view) {
         if (view instanceof TextureView) return;
         LayerDrawable newDrawable;
-        StrokeLineDrawable border = new StrokeLineDrawable();
-        border.setStroke(3, Color.rgb(255, 0, 0));
         if (view.getBackground() != null) {
-            LogHelper.d("View", view.getClass().getName());
             Drawable oldDrawable = view.getBackground();
             if (oldDrawable instanceof LayerDrawable) {
                 for (int i = 0; i < ((LayerDrawable) oldDrawable).getNumberOfLayers(); i++) {
@@ -43,11 +46,11 @@ public final class ViewUtils {
             }
             newDrawable = new LayerDrawable(new Drawable[]{
                 oldDrawable,
-                border
+                new StrokeLineDrawable(view)
             });
         } else {
             newDrawable = new LayerDrawable(new Drawable[]{
-                border
+                new StrokeLineDrawable(view)
             });
         }
         try {
@@ -125,5 +128,36 @@ public final class ViewUtils {
 
 }
 
-class StrokeLineDrawable extends GradientDrawable {
+class StrokeLineDrawable extends Drawable {
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private final android.graphics.Rect rect;
+
+    private final Context context;
+
+    public StrokeLineDrawable(View view) {
+        rect = new android.graphics.Rect(0, 0, view.getWidth(), view.getHeight());
+        context = view.getContext();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(4);
+    }
+
+    @Override
+    public void draw(@NonNull Canvas canvas) {
+        canvas.drawRect(rect, paint);
+    }
+
+    @Override
+    public void setAlpha(int alpha) {
+    }
+
+    @Override
+    public void setColorFilter(@Nullable ColorFilter colorFilter) {
+    }
+
+    @Override
+    public int getOpacity() {
+        return PixelFormat.TRANSLUCENT;
+    }
 }

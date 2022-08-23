@@ -6,7 +6,9 @@ import com.didichuxing.doraemonkit.DoKit
 import com.didichuxing.doraemonkit.R
 import com.didichuxing.doraemonkit.config.DesignCheckConfig
 import com.didichuxing.doraemonkit.kit.AbstractKit
+import com.didichuxing.doraemonkit.util.ToastUtils
 import com.google.auto.service.AutoService
+import org.opencv.android.OpenCVLoader
 
 @AutoService(AbstractKit::class)
 class DesignCheckKit : AbstractKit() {
@@ -19,10 +21,14 @@ class DesignCheckKit : AbstractKit() {
         get() = true
 
     override fun onClickWithReturn(activity: Activity): Boolean {
-        System.loadLibrary("opencv_java4")
-        DoKit.launchFloating<DesignCheckInfoDoKitView>()
-        DesignCheckConfig.setDesignCheckOpen(true)
-        return true
+        return if (OpenCVLoader.initDebug()) {
+            DoKit.launchFloating<DesignCheckInfoDoKitView>()
+            DesignCheckConfig.setDesignCheckOpen(true)
+            true
+        } else {
+            ToastUtils.showShort("Error in loading OpenCV lib")
+            false
+        }
     }
 
     override fun onAppInit(context: Context?) {

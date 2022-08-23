@@ -83,7 +83,7 @@ public final class ImageCompareUtils {
     }
 
     // todo
-    public static boolean saveResult(Bitmap resReport, String resFilePath, String fileName, boolean isLocal){
+    public static boolean saveReport(Bitmap resReport, String resFilePath, String fileName, boolean isLocal){
         byte[] resByte = ImageUtils.bitmap2Bytes(resReport, Bitmap.CompressFormat.PNG, 100);
         if (isLocal){
             return FileIOUtils.writeFileFromBytesByStream(resFilePath + "/" + fileName, resByte);
@@ -106,7 +106,6 @@ public final class ImageCompareUtils {
                     status[0] = true;
                 }
             });
-            Log.d("TAG", "saveResult: " + Arrays.toString(status));
             return status[0];
         }
     }
