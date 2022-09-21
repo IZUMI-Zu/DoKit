@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.didichuxing.doraemonkit.util.FileIOUtils;
 import com.didichuxing.doraemonkit.util.ImageUtils;
@@ -32,7 +31,6 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -68,7 +66,7 @@ public final class ImageCompareUtils {
             for (MatOfPoint matOfPoint : diffDot) {
                 Imgproc.approxPolyDP(new MatOfPoint2f(matOfPoint.toArray()),
                     new MatOfPoint2f(matOfPoint.toArray()), 3, true);
-                Imgproc.rectangle(tarScreenMat, Imgproc.boundingRect(matOfPoint), new Scalar(255, 0, 0, 128), 2);
+                Imgproc.rectangle(tarScreenMat, Imgproc.boundingRect(matOfPoint), new Scalar(255, 0, 0, 128), 4);
             }
             isCompare = true;
             return generateReport(tarScreenMat, srcScreenMat);
@@ -161,10 +159,10 @@ public final class ImageCompareUtils {
         Core.absdiff(image1Gray, image2Gray, absFrameDifference);
         absFrameDifference.convertTo(absFrameDifference, CvType.CV_8UC1, 1, 0);
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(7, 7), new Point(-1, -1));
-        Imgproc.threshold(absFrameDifference, segmentation, 100, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(absFrameDifference, segmentation, 50, 255, Imgproc.THRESH_BINARY);
         Imgproc.medianBlur(segmentation, segmentation, 3);
         Imgproc.morphologyEx(segmentation, segmentation, Imgproc.MORPH_CLOSE,
-            element, new Point(-1, -1), 2, Core.BORDER_REPLICATE);
+            element, new Point(-1, -1), 3, Core.BORDER_REPLICATE);
         return segmentation;
     }
 
