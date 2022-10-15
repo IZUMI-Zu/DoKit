@@ -110,7 +110,7 @@ public final class ImageCompareUtils {
 
     // 图片须保持同比例
     private static boolean matSizeCompress(Mat tarMat, Mat srcMat) {
-        if (((double) tarMat.rows() / tarMat.cols()) == ((double) srcMat.rows() / srcMat.cols())) {
+        if (Math.abs(((double) tarMat.rows() / tarMat.cols()) - ((double) srcMat.rows() / srcMat.cols())) <= 10e-3) {
             if (tarMat.rows() != srcMat.rows())
                 Imgproc.resize(srcMat, srcMat, tarMat.size(), 0, 0, Imgproc.INTER_LANCZOS4);
             return true;
@@ -159,7 +159,7 @@ public final class ImageCompareUtils {
         Core.absdiff(image1Gray, image2Gray, absFrameDifference);
         absFrameDifference.convertTo(absFrameDifference, CvType.CV_8UC1, 1, 0);
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(7, 7), new Point(-1, -1));
-        Imgproc.threshold(absFrameDifference, segmentation, 50, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(absFrameDifference, segmentation, 65, 255, Imgproc.THRESH_BINARY);
         Imgproc.medianBlur(segmentation, segmentation, 3);
         Imgproc.morphologyEx(segmentation, segmentation, Imgproc.MORPH_CLOSE,
             element, new Point(-1, -1), 3, Core.BORDER_REPLICATE);
