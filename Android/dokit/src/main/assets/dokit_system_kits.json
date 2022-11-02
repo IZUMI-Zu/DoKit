@@ -231,6 +231,11 @@
         "allClassName": "com.didichuxing.doraemonkit.kit.layoutborder.LayoutBorderKit",
         "checked": true,
         "innerKitId": "dokit_sdk_ui_ck_border"
+      },
+      {
+        "allClassName": "com.didichuxing.doraemonkit.kit.designcheck.DesignCheckKit",
+        "checked": true,
+        "innerKitId": "dokit_sdk_ui_ck_design_check"
       }
     ]
   }

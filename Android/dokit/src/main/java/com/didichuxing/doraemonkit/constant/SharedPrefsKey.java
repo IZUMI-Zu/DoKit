@@ -32,6 +32,7 @@ public interface SharedPrefsKey {
     String LAYOUT_BORDER_OPEN = "layout_border_open";
     String LAYOUT_LEVEL_OPEN = "layout_level_open";
     String TOP_ACTIVITY_OPEN = "top_activity_open";
+    String DESIGN_CHECK_OPEN = "design_check_open";
     /**
      * 悬浮窗启动模式
      */

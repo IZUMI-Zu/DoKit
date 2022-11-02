@@ -37,6 +37,8 @@
     <string name="dk_kit_db_debug">DBView</string>
     <string name="dk_kit_weak_network">Weak Network</string>
     <string name="dk_kit_view_check">View Check</string>
+    <string name="dk_kit_design_check">Design View Check</string>
+    <string name="dk_kit_design_check_compare">Compare This</string>
     <string name="dk_kit_net_monitor">Network</string>
     <string name="dk_kit_ui_monitor">Show Current Infos On UI</string>
     <string name="dk_kit_time_counter">Launch Time</string>

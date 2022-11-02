@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import androidx.core.view.children
+import com.didichuxing.doraemondemo.designcheck.DCActivity
 import com.didichuxing.doraemondemo.mc.MCActivity
 import com.didichuxing.doraemondemo.module.CrashTest
 import com.didichuxing.doraemondemo.module.DoKitItemView
@@ -136,6 +137,9 @@ class MainDoKitActivity : BaseStatusBarActivity() {
             }
             "标尺对齐测试" -> {
                 startActivity(Intent(this, EmptyActivity::class.java))
+            }
+            "设计稿还原度测试" -> {
+                startActivity(Intent(this, DCActivity::class.java))
             }
 
             //其他工具

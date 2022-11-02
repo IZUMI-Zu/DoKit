@@ -291,8 +291,17 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="14dp"
                 android:layout_marginRight="14dp"
-                app:itemText="标尺对齐测试" />
+                app:itemText="标尺对齐测试" >
 
+            </com.didichuxing.doraemondemo.module.DoKitItemView>
+
+
+            <com.didichuxing.doraemondemo.module.DoKitItemView
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                app:itemText="设计稿还原度测试" />
 
             <TextView
                 android:layout_width="wrap_content"
