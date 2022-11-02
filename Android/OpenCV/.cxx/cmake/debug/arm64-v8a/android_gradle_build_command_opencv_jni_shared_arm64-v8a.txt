@@ -1,7 +1,0 @@
-Executable : D:\CodingTools\Android\Sdk\cmake\3.10.2.4988404\bin\ninja.exe
-arguments : 
--C
-D:\SummerPro\GLCC-Dokit\DoKit\Android\OpenCV\.cxx\cmake\debug\arm64-v8a
-opencv_jni_shared
-jvmArgs : 
-

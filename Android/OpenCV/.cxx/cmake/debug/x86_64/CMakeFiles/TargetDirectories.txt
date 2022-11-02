@@ -1,3 +1,0 @@
-D:/SummerPro/GLCC-Dokit/DoKit/Android/OpenCV/.cxx/cmake/debug/x86_64/CMakeFiles/opencv_jni_shared.dir
-D:/SummerPro/GLCC-Dokit/DoKit/Android/OpenCV/.cxx/cmake/debug/x86_64/CMakeFiles/edit_cache.dir
-D:/SummerPro/GLCC-Dokit/DoKit/Android/OpenCV/.cxx/cmake/debug/x86_64/CMakeFiles/rebuild_cache.dir
