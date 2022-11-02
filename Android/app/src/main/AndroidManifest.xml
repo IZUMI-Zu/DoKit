@@ -52,6 +52,7 @@
         <activity android:name=".module.bigbitmap.BigBitmapActivity" />
         <activity android:name=".module.leak.LeakActivity" />
         <activity android:name=".mc.MCActivity" />
+        <activity android:name=".designcheck.DCActivity" />
         <activity android:name="com.amap.api.navi.AmapRouteActivity" />
         <activity
             android:name=".comm.CommFragmentActivity"
